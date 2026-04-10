@@ -20,17 +20,17 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
     pdf.cell(0, 7, contato, ln=True, align="C")
     pdf.ln(4)
 
-    # Linha divisória
+    # Linha divisoria
     pdf.set_draw_color(100, 100, 200)
     pdf.set_line_width(0.8)
     pdf.line(20, pdf.get_y(), 190, pdf.get_y())
     pdf.ln(6)
 
-    # Experiência Profissional
+    # Experiencia Profissional
     if curriculo.experiencias:
         pdf.set_font("Helvetica", "B", 13)
         pdf.set_text_color(60, 60, 180)
-        pdf.cell(0, 8, "Experiência Profissional", ln=True)
+        pdf.cell(0, 8, "Experiencia Profissional", ln=True)
         pdf.set_line_width(0.3)
         pdf.line(20, pdf.get_y(), 190, pdf.get_y())
         pdf.ln(3)
@@ -41,16 +41,16 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
             pdf.cell(0, 7, exp["cargo"], ln=True)
             pdf.set_font("Helvetica", size=10)
             pdf.set_text_color(80, 80, 80)
-            pdf.cell(0, 6, f'{exp["empresa"]}  —  {exp["periodo"]}', ln=True)
+            pdf.cell(0, 6, f'{exp["empresa"]} - {exp["periodo"]}', ln=True)
             pdf.ln(2)
 
         pdf.ln(2)
 
-    # Formação Acadêmica
+    # Formacao Academica
     if curriculo.formacoes:
         pdf.set_font("Helvetica", "B", 13)
         pdf.set_text_color(60, 60, 180)
-        pdf.cell(0, 8, "Formação Acadêmica", ln=True)
+        pdf.cell(0, 8, "Formacao Academica", ln=True)
         pdf.set_line_width(0.3)
         pdf.line(20, pdf.get_y(), 190, pdf.get_y())
         pdf.ln(3)
@@ -61,7 +61,7 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
             pdf.cell(0, 7, form["curso"], ln=True)
             pdf.set_font("Helvetica", size=10)
             pdf.set_text_color(80, 80, 80)
-            pdf.cell(0, 6, f'{form["instituicao"]}  —  {form["ano"]}', ln=True)
+            pdf.cell(0, 6, f'{form["instituicao"]} - {form["ano"]}', ln=True)
             pdf.ln(2)
 
     pdf.output(caminho_saida)
