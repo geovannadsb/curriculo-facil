@@ -57,7 +57,7 @@ Muitas pessoas, especialmente jovens em busca do primeiro emprego, têm dificuld
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/curriculo-facil.git
+git clone https://github.com/geovannadsb/curriculo-facil.git
 cd curriculo-facil
 
 # 2. (Opcional) Crie e ative um ambiente virtual
