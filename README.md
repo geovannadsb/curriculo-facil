@@ -1,8 +1,5 @@
 # 📄 CurrículoFácil
 
-![CI](https://github.com/Sgeovannadsb/curriculo-facil/actions/workflows/ci.yml/badge.svg)
-
-> Versão: **1.0.0**
 
 ---
 
