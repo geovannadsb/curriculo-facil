@@ -1,17 +1,17 @@
-# 📄 CurrículoFácil
+# CurrículoFácil
 
 
 ---
 
-## 🎯 Problema Real
+## Problema Real
 
 Muitas pessoas, especialmente jovens em busca do primeiro emprego, têm dificuldade em criar um currículo profissional bem estruturado. A falta de ferramentas simples e acessíveis faz com que oportunidades sejam perdidas por causa de documentos mal formatados ou incompletos.
 
-## 💡 Solução
+## Solução
 
 **CurrículoFácil** é uma aplicação desktop com interface gráfica (GUI) que guia o usuário no preenchimento de seus dados pessoais, experiências profissionais e formação acadêmica, gerando automaticamente um arquivo PDF formatado e profissional.
 
-## 👥 Público-alvo
+## Público-alvo
 
 - Jovens em busca do primeiro emprego
 - Pessoas sem familiaridade com editores de texto
@@ -19,7 +19,7 @@ Muitas pessoas, especialmente jovens em busca do primeiro emprego, têm dificuld
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - Cadastro de dados pessoais (nome, e-mail, telefone, cidade)
 - Adição e remoção de experiências profissionais
@@ -30,7 +30,7 @@ Muitas pessoas, especialmente jovens em busca do primeiro emprego, têm dificuld
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Tecnologia | Uso |
 |------------|-----|
@@ -43,7 +43,7 @@ Muitas pessoas, especialmente jovens em busca do primeiro emprego, têm dificuld
 
 ---
 
-## 📦 Instalação
+## Instalação
 
 ### Pré-requisitos
 
@@ -68,7 +68,7 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Como Executar
+## Como Executar
 
 ```bash
 python src/app.py
@@ -78,7 +78,7 @@ A janela do aplicativo abrirá. Navegue pelas abas, preencha os dados e clique e
 
 ---
 
-## 🧪 Como Rodar os Testes
+## Como Rodar os Testes
 
 ```bash
 pytest tests/ -v
@@ -88,7 +88,7 @@ Os testes cobrem: dados pessoais válidos e inválidos, experiências, formaçõ
 
 ---
 
-## 🔍 Como Rodar o Lint
+## Como Rodar o Lint
 
 ```bash
 ruff check src/
@@ -102,7 +102,7 @@ ruff check src/ --fix
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 curriculo-facil/
@@ -123,7 +123,7 @@ curriculo-facil/
 
 ---
 
-## 👤 Autor
+## Autor
 
 **Geovanna dos Santos Benedito**  
 Bootcamp II — Campus Virtual 2026/1  
