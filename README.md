@@ -1,7 +1,7 @@
 # CurrículoFácil
 
 ## Acesse Online
-[[https://curriculo-facil-xxx.streamlit.app](https://curriculo-facil-xxx.streamlit.app)](https://curriculo-facil-fbn5drqprzyywxrpyputlo.streamlit.app/)
+https://curriculo-facil-fbn5drqprzyywxrpyputlo.streamlit.app/
 ---
 
 ## Problema Real
