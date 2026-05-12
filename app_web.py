@@ -1,12 +1,8 @@
 import streamlit as st
-import sys
-import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-
-from curriculo import Curriculo
-from gerador_pdf import gerar_pdf
-from viacep import buscar_cidade_por_cep
+from src.curriculo import Curriculo
+from src.gerador_pdf import gerar_pdf
+from src.viacep import buscar_cidade_por_cep
 
 # ── Configuração da página ───────────────────────────────────────────────────
 st.set_page_config(
