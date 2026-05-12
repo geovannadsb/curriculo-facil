@@ -110,3 +110,40 @@ def test_limpar_curriculo():
     c.limpar()
     assert not c.esta_pronto()
     assert len(c.experiencias) == 0
+
+# ── Teste de Integração ───────────────────────────────────────────────────────
+from unittest.mock import patch, MagicMock
+import json
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+from viacep import buscar_cidade_por_cep  # noqa: E402
+
+
+def test_buscar_cidade_por_cep_valido():
+    mock_response = MagicMock()
+    mock_response.read.return_value = json.dumps({
+        "localidade": "Brasilia",
+        "uf": "DF"
+    }).encode()
+    mock_response.__enter__ = lambda s: s
+    mock_response.__exit__ = MagicMock(return_value=False)
+
+    with patch("urllib.request.urlopen", return_value=mock_response):
+        resultado = buscar_cidade_por_cep("70040010")
+        assert resultado == "Brasilia - DF"
+
+
+def test_buscar_cep_invalido_levanta_erro():
+    with pytest.raises(ValueError, match="CEP invalido"):
+        buscar_cidade_por_cep("123")
+
+
+def test_buscar_cep_nao_encontrado():
+    mock_response = MagicMock()
+    mock_response.read.return_value = json.dumps({"erro": True}).encode()
+    mock_response.__enter__ = lambda s: s
+    mock_response.__exit__ = MagicMock(return_value=False)
+
+    with patch("urllib.request.urlopen", return_value=mock_response):
+        with pytest.raises(ValueError, match="CEP nao encontrado"):
+            buscar_cidade_por_cep("00000000")
