@@ -16,21 +16,22 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
     # Contato
     pdf.set_font("Helvetica", size=10)
     pdf.set_text_color(80, 80, 80)
-    contato = f'{dados["email"]}  |  {dados["telefone"]}  |  {dados["cidade"]}'
+    contato = f'{dados["email"]} | {dados["telefone"]} | {dados["cidade"]}'
     pdf.cell(0, 7, contato, ln=True, align="C")
     pdf.ln(4)
 
-    # Linha divisoria
+    # Linha divisória
     pdf.set_draw_color(100, 100, 200)
     pdf.set_line_width(0.8)
     pdf.line(20, pdf.get_y(), 190, pdf.get_y())
     pdf.ln(6)
 
-    # Experiencia Profissional
+    # Experiência Profissional
     if curriculo.experiencias:
         pdf.set_font("Helvetica", "B", 13)
         pdf.set_text_color(60, 60, 180)
         pdf.cell(0, 8, "Experiencia Profissional", ln=True)
+
         pdf.set_line_width(0.3)
         pdf.line(20, pdf.get_y(), 190, pdf.get_y())
         pdf.ln(3)
@@ -39,18 +40,23 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
             pdf.set_font("Helvetica", "B", 11)
             pdf.set_text_color(30, 30, 30)
             pdf.cell(0, 7, exp["cargo"], ln=True)
+
             pdf.set_font("Helvetica", size=10)
             pdf.set_text_color(80, 80, 80)
-            pdf.cell(0, 6, f'{exp["empresa"]} - {exp["periodo"]}', ln=True)
+
+            texto_exp = f'{exp["empresa"]} - {exp["periodo"]}'
+            pdf.cell(0, 6, texto_exp, ln=True)
+
             pdf.ln(2)
 
         pdf.ln(2)
 
-    # Formacao Academica
+    # Formação Acadêmica
     if curriculo.formacoes:
         pdf.set_font("Helvetica", "B", 13)
         pdf.set_text_color(60, 60, 180)
         pdf.cell(0, 8, "Formacao Academica", ln=True)
+
         pdf.set_line_width(0.3)
         pdf.line(20, pdf.get_y(), 190, pdf.get_y())
         pdf.ln(3)
@@ -59,9 +65,13 @@ def gerar_pdf(curriculo, caminho_saida="curriculo.pdf"):
             pdf.set_font("Helvetica", "B", 11)
             pdf.set_text_color(30, 30, 30)
             pdf.cell(0, 7, form["curso"], ln=True)
+
             pdf.set_font("Helvetica", size=10)
             pdf.set_text_color(80, 80, 80)
-            pdf.cell(0, 6, f'{form["instituicao"]} - {form["ano"]}', ln=True)
+
+            texto_form = f'{form["instituicao"]} - {form["ano"]}'
+            pdf.cell(0, 6, texto_form, ln=True)
+
             pdf.ln(2)
 
     pdf.output(caminho_saida)
