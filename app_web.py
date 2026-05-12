@@ -36,12 +36,12 @@ if "curriculo" not in st.session_state:
 curriculo = st.session_state.curriculo
 
 # ── Cabeçalho ────────────────────────────────────────────────────────────────
-st.markdown("# 📄 CurrículoFácil")
+st.markdown("# CurrículoFácil")
 st.markdown("Preencha seus dados e gere um currículo profissional em PDF com um clique.")
 st.divider()
 
 # ── Dados Pessoais ────────────────────────────────────────────────────────────
-st.markdown("## 👤 Dados Pessoais")
+st.markdown("## Dados Pessoais")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -57,7 +57,7 @@ cidade = st.text_input(
     placeholder="Será preenchida automaticamente pelo CEP",
 )
 
-if st.button("🔍 Buscar CEP"):
+if st.button("Buscar CEP"):
     try:
         resultado = buscar_cidade_por_cep(cep)
         st.session_state["cidade_cep"] = resultado
@@ -66,20 +66,20 @@ if st.button("🔍 Buscar CEP"):
     except Exception as e:
         st.error(str(e))
 
-if st.button("💾 Salvar Dados Pessoais"):
+if st.button("Salvar Dados Pessoais"):
     try:
         curriculo.adicionar_dados_pessoais(
             nome, email, telefone,
             st.session_state.get("cidade_cep", cidade)
         )
-        st.success("✅ Dados pessoais salvos com sucesso!")
+        st.success("Dados pessoais salvos com sucesso!")
     except ValueError as e:
         st.error(str(e))
 
 st.divider()
 
 # ── Experiência Profissional ──────────────────────────────────────────────────
-st.markdown("## 💼 Experiência Profissional")
+st.markdown("## Experiência Profissional")
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -92,7 +92,7 @@ with col3:
 if st.button("➕ Adicionar Experiência"):
     try:
         curriculo.adicionar_experiencia(empresa, cargo, periodo)
-        st.success("✅ Experiência adicionada!")
+        st.success("Experiência adicionada!")
     except ValueError as e:
         st.error(str(e))
 
@@ -110,7 +110,7 @@ if curriculo.experiencias:
 st.divider()
 
 # ── Formação Acadêmica ────────────────────────────────────────────────────────
-st.markdown("## 🎓 Formação Acadêmica")
+st.markdown("## Formação Acadêmica")
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -123,7 +123,7 @@ with col3:
 if st.button("➕ Adicionar Formação"):
     try:
         curriculo.adicionar_formacao(instituicao, curso, ano)
-        st.success("✅ Formação adicionada!")
+        st.success("Formação adicionada!")
     except ValueError as e:
         st.error(str(e))
 
@@ -141,22 +141,22 @@ if curriculo.formacoes:
 st.divider()
 
 # ── Gerar PDF ────────────────────────────────────────────────────────────────
-st.markdown("## 📄 Gerar Currículo em PDF")
+st.markdown("## Gerar Currículo em PDF")
 
-if st.button("📄 Gerar PDF do Currículo", use_container_width=True):
+if st.button("Gerar PDF do Currículo", use_container_width=True):
     if not curriculo.esta_pronto():
-        st.warning("⚠️ Preencha e salve os dados pessoais primeiro!")
+        st.warning("Preencha e salve os dados pessoais primeiro!")
     else:
         caminho = gerar_pdf(curriculo, "/tmp/curriculo_gerado.pdf")
         with open(caminho, "rb") as f:
             st.download_button(
-                label="⬇️ Baixar PDF",
+                label="Baixar PDF",
                 data=f,
                 file_name="curriculo.pdf",
                 mime="application/pdf",
                 use_container_width=True,
             )
-        st.success("✅ PDF gerado! Clique em 'Baixar PDF' para salvar.")
+        st.success("PDF gerado! Clique em 'Baixar PDF' para salvar.")
 
 st.markdown("---")
 st.markdown(
