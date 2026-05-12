@@ -2,7 +2,7 @@ import streamlit as st
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 from curriculo import Curriculo
 from gerador_pdf import gerar_pdf
@@ -30,13 +30,6 @@ st.markdown("""
     .stButton>button:hover { background-color: #43054e; }
     h1 { color: #43054e; }
     h2 { color: #662c92; border-bottom: 2px solid #bf0087; padding-bottom: 4px; }
-    .sucesso {
-        background-color: #eaffea;
-        border-left: 4px solid #27AE60;
-        padding: 10px 16px;
-        border-radius: 6px;
-        margin: 8px 0;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -51,7 +44,7 @@ st.markdown("# 📄 CurrículoFácil")
 st.markdown("Preencha seus dados e gere um currículo profissional em PDF com um clique.")
 st.divider()
 
-# ── Aba 1: Dados Pessoais ────────────────────────────────────────────────────
+# ── Dados Pessoais ────────────────────────────────────────────────────────────
 st.markdown("## 👤 Dados Pessoais")
 
 col1, col2 = st.columns(2)
@@ -62,33 +55,34 @@ with col2:
     telefone = st.text_input("Telefone", placeholder="Ex: 61999999999")
     cep = st.text_input("CEP", placeholder="Ex: 70040010")
 
-cidade = st.text_input("Cidade", placeholder="Será preenchida automaticamente pelo CEP")
+cidade = st.text_input(
+    "Cidade",
+    value=st.session_state.get("cidade_cep", ""),
+    placeholder="Será preenchida automaticamente pelo CEP",
+)
 
-col_cep, col_salvar = st.columns([1, 2])
-with col_cep:
-    if st.button("🔍 Buscar CEP"):
-        try:
-            resultado = buscar_cidade_por_cep(cep)
-            st.session_state["cidade_cep"] = resultado
-            st.success(f"Cidade encontrada: {resultado}")
-        except Exception as e:
-            st.error(str(e))
+if st.button("🔍 Buscar CEP"):
+    try:
+        resultado = buscar_cidade_por_cep(cep)
+        st.session_state["cidade_cep"] = resultado
+        st.success(f"Cidade encontrada: {resultado}")
+        st.rerun()
+    except Exception as e:
+        st.error(str(e))
 
-if "cidade_cep" in st.session_state and not cidade:
-    cidade = st.session_state["cidade_cep"]
-
-with col_salvar:
-    if st.button("💾 Salvar Dados Pessoais"):
-        try:
-            curriculo.adicionar_dados_pessoais(nome, email, telefone,
-                st.session_state.get("cidade_cep", cidade))
-            st.success("✅ Dados pessoais salvos com sucesso!")
-        except ValueError as e:
-            st.error(str(e))
+if st.button("💾 Salvar Dados Pessoais"):
+    try:
+        curriculo.adicionar_dados_pessoais(
+            nome, email, telefone,
+            st.session_state.get("cidade_cep", cidade)
+        )
+        st.success("✅ Dados pessoais salvos com sucesso!")
+    except ValueError as e:
+        st.error(str(e))
 
 st.divider()
 
-# ── Aba 2: Experiência Profissional ──────────────────────────────────────────
+# ── Experiência Profissional ──────────────────────────────────────────────────
 st.markdown("## 💼 Experiência Profissional")
 
 col1, col2, col3 = st.columns(3)
@@ -119,7 +113,7 @@ if curriculo.experiencias:
 
 st.divider()
 
-# ── Aba 3: Formação Acadêmica ────────────────────────────────────────────────
+# ── Formação Acadêmica ────────────────────────────────────────────────────────
 st.markdown("## 🎓 Formação Acadêmica")
 
 col1, col2, col3 = st.columns(3)
@@ -157,7 +151,7 @@ if st.button("📄 Gerar PDF do Currículo", use_container_width=True):
     if not curriculo.esta_pronto():
         st.warning("⚠️ Preencha e salve os dados pessoais primeiro!")
     else:
-        caminho = gerar_pdf(curriculo, "curriculo_gerado.pdf")
+        caminho = gerar_pdf(curriculo, "/tmp/curriculo_gerado.pdf")
         with open(caminho, "rb") as f:
             st.download_button(
                 label="⬇️ Baixar PDF",
@@ -172,5 +166,5 @@ st.markdown("---")
 st.markdown(
     "<p style='text-align:center; color:#999; font-size:12px;'>"
     "CurrículoFácil · Bootcamp II · CEUB 2026</p>",
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
