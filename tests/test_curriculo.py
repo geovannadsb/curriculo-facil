@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from curriculo import Curriculo  # noqa: E402
+from src.curriculo import Curriculo
 
 
 # ── Dados Pessoais ────────────────────────────────────────────────────────────

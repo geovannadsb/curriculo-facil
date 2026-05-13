@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import sys
 import os
+from viacep import buscar_cidade_por_cep
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -115,6 +116,28 @@ entry_email.pack(**PAD)
 criar_label(aba1, "Telefone").pack(anchor="w", **PAD)
 entry_tel = criar_entry(aba1)
 entry_tel.pack(**PAD)
+
+# CEP com busca automática
+criar_label(aba1, "CEP").pack(anchor="w", **PAD)
+frame_cep = tk.Frame(aba1, bg=COR_BRANCO)
+frame_cep.pack(**PAD)
+entry_cep = criar_entry(frame_cep, largura=20)
+entry_cep.pack(side="left")
+
+def buscar_cep():
+    try:
+        cidade = buscar_cidade_por_cep(entry_cep.get())
+        entry_cidade.delete(0, tk.END)
+        entry_cidade.insert(0, cidade)
+        status_var.set("✅ Cidade preenchida automaticamente!")
+    except Exception as e:
+        messagebox.showerror("Erro", str(e))
+
+tk.Button(
+    frame_cep, text="🔍 Buscar", command=buscar_cep,
+    bg=COR_PRIMARIA, fg="white", font=("Segoe UI", 9, "bold"),
+    relief="flat", padx=10, cursor="hand2"
+).pack(side="left", padx=8)
 
 criar_label(aba1, "Cidade").pack(anchor="w", **PAD)
 entry_cidade = criar_entry(aba1)
