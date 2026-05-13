@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches:
+      - "**"
+
   pull_request:
-    branches: ["**"]
+    branches:
+      - "**"
 
 jobs:
   ci:
@@ -20,13 +23,12 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependências
-        run: pip install -r requirements.txt
-
-      - name: Instalar ruff
-        run: pip install ruff
+        run: |
+          pip install -r requirements.txt
+          pip install ruff pytest
 
       - name: Lint com Ruff
-        run: ruff check src/ --exclude src/app.py
+        run: ruff check . --exclude src/app.py
 
       - name: Testes com Pytest
         run: pytest tests/ -v
