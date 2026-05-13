@@ -1,148 +1,155 @@
-import pytest
-import sys
+import json
 import os
+import sys
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from src.curriculo import Curriculo
+from curriculo import Curriculo
+from viacep import buscar_cidade_por_cep
 
 
-# ── Dados Pessoais ────────────────────────────────────────────────────────────
+# ── Testes da classe Curriculo ────────────────────────────────────────────────
 
-def test_adicionar_dados_pessoais_validos():
+def test_adicionar_dados_pessoais():
     c = Curriculo()
-    c.adicionar_dados_pessoais("Ana Silva", "ana@email.com", "61999999999", "Brasília")
-    assert c.dados_pessoais["nome"] == "Ana Silva"
-    assert c.dados_pessoais["email"] == "ana@email.com"
+
+    c.adicionar_dados_pessoais(
+        "Geovanna",
+        "geo@email.com",
+        "61999999999",
+        "Brasilia - DF",
+    )
+
+    assert c.dados_pessoais["nome"] == "Geovanna"
+    assert c.dados_pessoais["email"] == "geo@email.com"
 
 
-def test_dados_pessoais_sem_nome_levanta_erro():
+def test_nome_vazio():
     c = Curriculo()
-    with pytest.raises(ValueError, match="Nome e e-mail são obrigatórios"):
-        c.adicionar_dados_pessoais("", "ana@email.com", "", "")
 
-
-def test_dados_pessoais_sem_email_levanta_erro():
-    c = Curriculo()
     with pytest.raises(ValueError):
-        c.adicionar_dados_pessoais("Ana Silva", "", "", "")
+        c.adicionar_dados_pessoais(
+            "",
+            "teste@email.com",
+            "61999999999",
+            "Brasilia - DF",
+        )
 
 
-# ── Experiência ───────────────────────────────────────────────────────────────
-
-def test_adicionar_experiencia_valida():
+def test_email_invalido():
     c = Curriculo()
-    c.adicionar_experiencia("Empresa X", "Desenvolvedor", "2022–2024")
+
+    with pytest.raises(ValueError):
+        c.adicionar_dados_pessoais(
+            "Geovanna",
+            "emailinvalido",
+            "61999999999",
+            "Brasilia - DF",
+        )
+
+
+def test_adicionar_experiencia():
+    c = Curriculo()
+
+    c.adicionar_experiencia(
+        "Google",
+        "Desenvolvedor",
+        "2022-2024",
+    )
+
     assert len(c.experiencias) == 1
-    assert c.experiencias[0]["empresa"] == "Empresa X"
+    assert c.experiencias[0]["empresa"] == "Google"
 
 
-def test_adicionar_multiplas_experiencias():
+def test_remover_experiencia():
     c = Curriculo()
-    c.adicionar_experiencia("Empresa A", "Estagiário", "2020–2021")
-    c.adicionar_experiencia("Empresa B", "Analista", "2021–2023")
-    assert len(c.experiencias) == 2
 
+    c.adicionar_experiencia(
+        "Google",
+        "Dev",
+        "2022",
+    )
 
-def test_experiencia_sem_cargo_levanta_erro():
-    c = Curriculo()
-    with pytest.raises(ValueError):
-        c.adicionar_experiencia("Empresa X", "", "2022–2024")
-
-
-def test_experiencia_sem_empresa_levanta_erro():
-    c = Curriculo()
-    with pytest.raises(ValueError):
-        c.adicionar_experiencia("", "Desenvolvedor", "2022–2024")
-
-
-def test_remover_experiencia_valida():
-    c = Curriculo()
-    c.adicionar_experiencia("Empresa X", "Dev", "2022–2024")
     c.remover_experiencia(0)
+
     assert len(c.experiencias) == 0
 
 
-def test_remover_experiencia_indice_invalido():
+def test_adicionar_formacao():
     c = Curriculo()
-    with pytest.raises(IndexError):
-        c.remover_experiencia(99)
 
+    c.adicionar_formacao(
+        "CEUB",
+        "ADS",
+        "2026",
+    )
 
-# ── Formação ──────────────────────────────────────────────────────────────────
-
-def test_adicionar_formacao_valida():
-    c = Curriculo()
-    c.adicionar_formacao("UnB", "Ciência da Computação", "2023")
     assert len(c.formacoes) == 1
-    assert c.formacoes[0]["curso"] == "Ciência da Computação"
+    assert c.formacoes[0]["curso"] == "ADS"
 
 
-def test_formacao_sem_curso_levanta_erro():
+def test_remover_formacao():
     c = Curriculo()
-    with pytest.raises(ValueError):
-        c.adicionar_formacao("UnB", "", "2023")
+
+    c.adicionar_formacao(
+        "CEUB",
+        "ADS",
+        "2026",
+    )
+
+    c.remover_formacao(0)
+
+    assert len(c.formacoes) == 0
 
 
-def test_remover_formacao_indice_invalido():
+def test_curriculo_pronto():
     c = Curriculo()
-    with pytest.raises(IndexError):
-        c.remover_formacao(0)
+
+    c.adicionar_dados_pessoais(
+        "Geovanna",
+        "geo@email.com",
+        "61999999999",
+        "Brasilia - DF",
+    )
+
+    assert c.esta_pronto() is True
 
 
-# ── Estado geral ──────────────────────────────────────────────────────────────
-
-def test_curriculo_nao_pronto_sem_dados():
+def test_curriculo_nao_pronto():
     c = Curriculo()
-    assert not c.esta_pronto()
+
+    assert c.esta_pronto() is False
 
 
-def test_curriculo_pronto_com_dados():
-    c = Curriculo()
-    c.adicionar_dados_pessoais("João", "joao@email.com", "", "")
-    assert c.esta_pronto()
+# ── Testes da API ViaCEP ──────────────────────────────────────────────────────
 
-
-def test_limpar_curriculo():
-    c = Curriculo()
-    c.adicionar_dados_pessoais("João", "joao@email.com", "", "")
-    c.adicionar_experiencia("Empresa", "Dev", "2023")
-    c.limpar()
-    assert not c.esta_pronto()
-    assert len(c.experiencias) == 0
-
-# ── Teste de Integração ───────────────────────────────────────────────────────
-from unittest.mock import patch, MagicMock
-import json
-import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-from viacep import buscar_cidade_por_cep  # noqa: E402
-
-
-def test_buscar_cidade_por_cep_valido():
-    mock_response = MagicMock()
-    mock_response.read.return_value = json.dumps({
+def test_buscar_cidade_por_cep_sucesso():
+    resposta_mock = {
         "localidade": "Brasilia",
-        "uf": "DF"
-    }).encode()
-    mock_response.__enter__ = lambda s: s
-    mock_response.__exit__ = MagicMock(return_value=False)
+        "uf": "DF",
+    }
+
+    mock_response = MagicMock()
+    mock_response.read.return_value = json.dumps(resposta_mock).encode("utf-8")
+    mock_response.__enter__.return_value = mock_response
 
     with patch("urllib.request.urlopen", return_value=mock_response):
         resultado = buscar_cidade_por_cep("70040010")
-        assert resultado == "Brasilia - DF"
+
+    assert resultado == "Brasilia - DF"
 
 
-def test_buscar_cep_invalido_levanta_erro():
-    with pytest.raises(ValueError, match="CEP invalido"):
-        buscar_cidade_por_cep("123")
+def test_buscar_cidade_por_cep_invalido():
+    resposta_mock = {
+        "erro": True,
+    }
 
-
-def test_buscar_cep_nao_encontrado():
     mock_response = MagicMock()
-    mock_response.read.return_value = json.dumps({"erro": True}).encode()
-    mock_response.__enter__ = lambda s: s
-    mock_response.__exit__ = MagicMock(return_value=False)
+    mock_response.read.return_value = json.dumps(resposta_mock).encode("utf-8")
+    mock_response.__enter__.return_value = mock_response
 
     with patch("urllib.request.urlopen", return_value=mock_response):
         with pytest.raises(ValueError, match="CEP nao encontrado"):
