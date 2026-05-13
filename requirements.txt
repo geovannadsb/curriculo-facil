@@ -1,3 +1,4 @@
-streamlit
 fpdf2
-requests
+streamlit
+ruff
+pytest
