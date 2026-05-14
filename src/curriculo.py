@@ -7,12 +7,16 @@ class Curriculo:
     def adicionar_dados_pessoais(self, nome, email, telefone, cidade):
         if not nome or not email:
             raise ValueError("Nome e e-mail são obrigatórios.")
+
+        if "@" not in email:
+            raise ValueError("Email inválido")
+
         self.dados_pessoais = {
             "nome": nome,
             "email": email,
             "telefone": telefone,
             "cidade": cidade,
-        }
+    }
 
     def adicionar_experiencia(self, empresa, cargo, periodo):
         if not empresa or not cargo:
