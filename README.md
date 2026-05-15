@@ -108,17 +108,17 @@ ruff check src/ --fix
 ```
 curriculo-facil/
 ├── src/
-│   ├── app.py           # Interface gráfica (Tkinter)
-│   ├── curriculo.py     # Lógica de negócio
-│   └── gerador_pdf.py   # Geração do PDF
+│   ├── app.py           
+│   ├── curriculo.py     
+│   └── gerador_pdf.py   
 ├── tests/
 │   └── test_curriculo.py
 ├── .github/
 │   └── workflows/
-│       └── ci.yml       # Pipeline de CI
+│       └── ci.yml       
 ├── README.md
 ├── .gitignore
-├── pyproject.toml       # Versão e config do ruff
+├── pyproject.toml      
 └── requirements.txt
 ```
 
